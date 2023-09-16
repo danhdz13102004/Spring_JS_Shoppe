@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../../.."
+		},
+		{
+			"path": "../../../../js_shoppe"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "shoppe",
+		"liveServer.settings.port": 5501
+	}
+}
