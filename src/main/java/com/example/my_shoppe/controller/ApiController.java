@@ -52,9 +52,9 @@ public class ApiController {
             Oder oder = oderRepository.findByIdKhachHang(user.getId());
             if(oder != null) {
                 List<CartItemRender> list = new ArrayList<>();
-                List<OderItem> oderItemList = oderItemRepository.findAllByOderId(oder.getId());
+                List<OderItem> oderItemList = oderItemRepository.findAllByOderid(oder.getId());
                 for(OderItem item : oderItemList) {
-                    Optional<Category> categoryOptional = categoryRepository.findById(item.getCategoryId());
+                    Optional<Category> categoryOptional = categoryRepository.findById(item.getCategoryid());
                     if(categoryOptional.isPresent()) {
                         Category category = categoryOptional.get();
                         CartItemRender cartItemRender = new CartItemRender(category,item);

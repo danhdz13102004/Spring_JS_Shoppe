@@ -79,6 +79,12 @@ function showItemSmallCart() {
         })
         .then(data => {
             var html = "";
+            html+= "<div class=\"header__cart-list-bridge\"></div>" +
+                "<div th:if=\"${#authorization.expression('isAuthenticated()')}\" class=\"header__cart-list-have-item\">\n" +
+                "                                <div class=\"header__cart-list-announce\">\n" +
+                "                                    <span class=\"header__cart-list-announce-add\">Sản phẩm đã thêm</span>\n" +
+                "                                </div>\n" +
+                "                                <ul class=\"header__cart-list-set\"> ";
             data.forEach(item => {
                 html += `<li class="header__cart-list-item">
                                         <img class="header__cart-list-item-img" src="../static/access/img/${item.category.image}.jpg" alt="">
@@ -91,11 +97,26 @@ function showItemSmallCart() {
                                                 <h3>${item.category.newpriceShow}đ</h3>
                                                 <h4>x${item.oderItem.quantity}</h4>
                                             </div>
-                                            <button class="header__cart-list-btn-delete" onclick="btnDetele(1)">Xóa</button>
+                                            <button class="header__cart-list-btn-delete" onclick="deleteById(${item.category.id})">Xóa</button>
                                         </div>
                                     </li>`;
             })
-            document.querySelector(".header__cart-list-set").innerHTML = html;
+            if(data.length > 0) {
+                html += " </ul>\n" +
+                    " <button class=\"header__cart-see-mycart\">Xem Giỏ Hàng </button" +
+                    "</div>\n" +
+                    "\n" +
+                    "                            </div>"
+                console.log(html);
+            }
+            else {
+                html = "<div class=\"header__cart-list-bridge\"></div>\n" +
+                    "                                <div th:unless=\"${#authorization.expression('isAuthenticated()')}\"  class=\"container-img-nocart\">\n" +
+                    "                                    <img th:unless=\"${#authorization.expression('isAuthenticated()')}\" src=\"../static/access/img/cart-empty-img.8b677cb3.png\" alt=\"\" class=\"header__cart-img-nocart\">\n" +
+                    "                                    <h3 th:unless=\"${#authorization.expression('isAuthenticated()')}\" class=\"header__cart-list-msg\">Chưa có sản phẩm </h3>\n" +
+                    "                                </div>"
+            }
+            document.querySelector(".header__cart-list.header__cart-list--no_cart").innerHTML = html;
             document.querySelector(".header_cart-badge").innerText = data.length;
         })
 }

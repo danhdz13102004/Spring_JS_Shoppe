@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -61,7 +62,7 @@ public class CartItemController {
                 Long totalCurrent = oder.getTotal();
                 oder.setTotal(totalCurrent + category.getNewprice() * quantity);
             }
-            OderItem oderItem = oderItemRepository.findByCategoryIdAndOderId(id,oder.getId());
+            OderItem oderItem = oderItemRepository.findByCategoryidAndOderid(id,oder.getId());
             if(oderItem == null) {
                 if(quantity > 0) {
                     oderItem = new OderItem(oder.getId(), category.getId(), category.getNewprice(), quantity);
@@ -83,5 +84,20 @@ public class CartItemController {
         oderRepository.saveAndFlush(oder);
 //        return oder;
         }
+        @GetMapping("/deleteitem")
+        public void deleteItem(@RequestParam("id") Long id) {
+            System.out.println("tới đây để xóa");
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String username = userDetails.getUsername();
+            User user = userRepository.findByUsername(username);
+            Oder oder = oderRepository.findByIdKhachHang(user.getId());
+            System.out.println(id + " " + oder.getId());
+            OderItem oderItem = oderItemRepository.findByCategoryidAndOderid(id,oder.getId());
+            System.out.println(oderItem.toString());
+            oderItemRepository.deleteById(oderItem.getId());
+//            oderItemRepository.deleteById(Long.valueOf(10));
+    }
+
 
     }

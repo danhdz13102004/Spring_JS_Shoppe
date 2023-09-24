@@ -8,11 +8,11 @@ public class OderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "oder_id")
-    private Long oderId;
+    @Column(name = "oderid")
+    private Long oderid;
 
-    @Column(name = "category_id")
-    private Long categoryId;
+    @Column(name = "categoryid")
+    private Long categoryid;
 
     @Column(name = "price")
     private Long price;
@@ -23,17 +23,17 @@ public class OderItem {
     public OderItem() {
     }
 
-    public OderItem(Long id, Long oderId, Long categoryId, Long price, Integer quantity) {
+    public OderItem(Long id, Long oderid, Long categoryid, Long price, Integer quantity) {
         this.id = id;
-        this.oderId = oderId;
-        this.categoryId = categoryId;
+        this.oderid = oderid;
+        this.categoryid = categoryid;
         this.price = price;
         this.quantity = quantity;
     }
 
-    public OderItem(Long oderId, Long categoryId, Long price, Integer quantity) {
-        this.oderId = oderId;
-        this.categoryId = categoryId;
+    public OderItem(Long oderid, Long categoryid, Long price, Integer quantity) {
+        this.oderid = oderid;
+        this.categoryid = categoryid;
         this.price = price;
         this.quantity = quantity;
     }
@@ -46,20 +46,20 @@ public class OderItem {
         this.id = id;
     }
 
-    public Long getOderId() {
-        return oderId;
+    public Long getOderid() {
+        return oderid;
     }
 
-    public void setOderId(Long oderId) {
-        this.oderId = oderId;
+    public void setOderid(Long oderid) {
+        this.oderid = oderid;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
+    public Long getCategoryid() {
+        return categoryid;
     }
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
+    public void setCategoryid(Long categoryid) {
+        this.categoryid = categoryid;
     }
 
     public Long getPrice() {

@@ -8,10 +8,13 @@ import java.util.List;
 
 @Repository
 public interface OderItemRepository extends JpaRepository<OderItem,Long> {
-   public OderItem findByOderId(Long id);
-   public List<OderItem> findAllByOderId(Long oder_id);
+   public OderItem findByOderid(Long id);
+   public List<OderItem> findAllByOderid(Long oder_id);
 
-   public OderItem findByCategoryId(Long id);
+   public OderItem findByCategoryid(Long id);
 
-   public OderItem findByCategoryIdAndOderId(Long id1,Long id2);
+   public OderItem findByCategoryidAndOderid(Long id1,Long id2);
+
+   public void deleteByCategoryidAndOderid(Long id1,Long id2);
+
 }
