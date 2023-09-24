@@ -41,19 +41,7 @@ public class UserServiceImpl implements UserService{
     public void save(User user) {
         userRepository.save(user);
     }
-    @PostConstruct
-    public void insert() {
-        User user = new User();
-        user.setUsername("danh");
-        user.setPassword("$2a$12$9QN5T2jH2LhcaDh1VtHwy./LrVCYoymtDNXu5ZVp5duf3hsGx/RPq");
-        user.setEnabled(true);
-        Collection<Role> list = new ArrayList<>();
-        Role role = new Role();
-        role.setName("ROLE_USER");
-        list.add(role);
-        user.setRoles(list);
-        userRepository.save(user);
-    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

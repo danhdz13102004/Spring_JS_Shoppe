@@ -21,10 +21,24 @@ public class Category {
     @Column(name = "image")
     private String image;
 
+    @Column(name = "id_phu")
+    private Long id_phu;
+
     private String oldpriceShow ="" ;
     private String newpriceShow  ="";
 
     public Category() {
+    }
+
+    public Category(Long id, String name, Long oldprice, Long newprice, String image, Long id_phu, String oldpriceShow, String newpriceShow) {
+        this.id = id;
+        this.name = name;
+        this.oldprice = oldprice;
+        this.newprice = newprice;
+        this.image = image;
+        this.id_phu = id_phu;
+        this.oldpriceShow = oldpriceShow;
+        this.newpriceShow = newpriceShow;
     }
 
     public Category(Long id, String name, Long oldprice, Long newprice, String image) {
@@ -33,7 +47,7 @@ public class Category {
         this.oldprice = oldprice;
         this.newprice = newprice;
         this.image = image;
-        toPriceString();
+//        toPriceString();
     }
 
     public Category(String name, Long oldprice, Long newprice, String image) {
@@ -41,7 +55,7 @@ public class Category {
         this.oldprice = oldprice;
         this.newprice = newprice;
         this.image = image;
-        toPriceString();
+//        toPriceString();
     }
 
     public Long getId() {
@@ -115,6 +129,14 @@ public class Category {
 
     public void setNewpriceShow(String newpriceShow) {
         this.newpriceShow = newpriceShow;
+    }
+
+    public Long getId_phu() {
+        return id_phu;
+    }
+
+    public void setId_phu(Long id_phu) {
+        this.id_phu = id_phu;
     }
 
     @Override

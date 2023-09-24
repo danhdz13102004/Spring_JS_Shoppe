@@ -39,22 +39,7 @@ function showRegister() {
     document.querySelector('.modal_register').classList.add('open');
 }
 
-function showLogin() {
-    document.querySelector('.modal').classList.add('open_modal');
-    document.querySelector('.modal_overlay').classList.add('open');
-    document.querySelector('.modal_login').classList.add('open');
-}
 
-function closeRegister() {
-    document.querySelector('.modal').classList.remove('open_modal');
-    document.querySelector('.modal_overlay').classList.remove('open');
-    document.querySelector('.modal_register').classList.remove('open');
-}
-function closeLogin() {
-    document.querySelector('.modal').classList.remove('open_modal');
-    document.querySelector('.modal_overlay').classList.remove('open');
-    document.querySelector('.modal_login').classList.remove('open');
-}
 var a = document.querySelector('.modal_overlay')
 // a.onclick = function() {
 //     closeRegister();

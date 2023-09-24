@@ -423,7 +423,8 @@
     background-color: #fff;
     box-shadow: 0 1px 20px rgba(0, 0, 0 , 0.4);
     display: none;
-    animation: NotifyID ease-in 0.15s;
+    animation: NotifyID ease-in-out 0.25s;
+    transform-origin: calc(100% - 30px) top;
     /*will-change: opacity transform ;*/
     cursor: default;
     z-index: 3;

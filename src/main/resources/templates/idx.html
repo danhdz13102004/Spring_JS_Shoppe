@@ -14,6 +14,7 @@
     <script src="../static/js/form_dk.js"></script>
     <script src="../static/js/main.js"></script>
     <script src="../static/js/show.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="main">
@@ -178,16 +179,17 @@
                         <div class="header_cart-wrap">
                             <i class="header__cart-icon fa-sharp fa-solid fa-cart-shopping"></i>
                             <div class="header_cart-badge-contain">
-                                <span class="header_cart-badge">3</span>
+                                <span class="header_cart-badge"></span>
                             </div>
                             <div class="header__cart-list header__cart-list--no_cart">
                                 <div class="header__cart-list-bridge"></div>
-<!--                                <img src="./access/img/cart-empty-img.8b677cb3.png" alt="" class="header__cart-img-nocart">-->
-<!--                                <h3 class="header__cart-list-msg">Chưa có sản phẩm </h3>-->
-                            <div class="header__cart-list-have-item">
+                                <div th:unless="${#authorization.expression('isAuthenticated()')}"  class="container-img-nocart">
+                                    <img th:unless="${#authorization.expression('isAuthenticated()')}" src="../static/access/img/cart-empty-img.8b677cb3.png" alt="" class="header__cart-img-nocart">
+                                    <h3 th:unless="${#authorization.expression('isAuthenticated()')}" class="header__cart-list-msg">Chưa có sản phẩm </h3>
+                                </div>
+                            <div th:if="${#authorization.expression('isAuthenticated()')}" class="header__cart-list-have-item">
                                 <div class="header__cart-list-announce">
                                     <span class="header__cart-list-announce-add">Sản phẩm đã thêm</span>
-
                                 </div>
                                 <ul class="header__cart-list-set">
                                     <li class="header__cart-list-item">
@@ -337,8 +339,7 @@
                                                 <span class="home-product-item_sale-off-lable">GIẢM</span>
                                             </div>
                                             <div class="container-btn-click">
-
-                                                <button class="add-my-wrap" onclick="CreaterCategory(1)">Thêm vào giỏ hàng</button>
+                                                <button class="add-my-wrap" th:onclick="'addToMyWrap(' + ${item.id} + ', 1)'" >Thêm vào giỏ hàng</button>
                                             </div>
                                         </div>
                                     </div>

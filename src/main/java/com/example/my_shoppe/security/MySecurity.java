@@ -32,11 +32,15 @@ public class MySecurity {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(
             configurer->configurer
-//                    .requestMatchers("/").permitAll()
-//                    .requestMatchers("/login/process").authenticated()
-                        .anyRequest().permitAll()
+//                    .requestMatchers("/","/static/**").permitAll()
+//////                    .requestMatchers("/login/**").permitAll()
+//                    .requestMatchers("/register/**").permitAll()
+//                    .anyRequest().authenticated()
+                    .requestMatchers("/add/**").authenticated()
+                    .anyRequest().permitAll()
         ).formLogin(
                 form-> form.loginPage("/login/process")
+                        .defaultSuccessUrl("/")
                         .loginProcessingUrl("/authenticateTheUser")
                         .permitAll()
 

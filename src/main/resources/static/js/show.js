@@ -67,10 +67,43 @@ function sortPrice(query) {
             // console.error(error);
         });
 }
+// Lấy item từ oder của người dùng để Render ra thanh thông báo nhỏ
+function showItemSmallCart() {
+    var url = currentURL + "/api/itemcart";
+    fetch(url)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Lỗi khi lấy dữ liệu từ URL");
+            }
+            return response.json();
+        })
+        .then(data => {
+            var html = "";
+            data.forEach(item => {
+                html += `<li class="header__cart-list-item">
+                                        <img class="header__cart-list-item-img" src="../static/access/img/${item.category.image}.jpg" alt="">
+                                        <div class="header__cart-list-detail">
+                                            <h3 class="header__cart-list-name">${item.category.name}</h3>
+                                        </div>
+
+                                        <div class="header__cart-list-number">
+                                            <div class="number-price">
+                                                <h3>${item.category.newpriceShow}đ</h3>
+                                                <h4>x${item.oderItem.quantity}</h4>
+                                            </div>
+                                            <button class="header__cart-list-btn-delete" onclick="btnDetele(1)">Xóa</button>
+                                        </div>
+                                    </li>`;
+            })
+            document.querySelector(".header__cart-list-set").innerHTML = html;
+            document.querySelector(".header_cart-badge").innerText = data.length;
+        })
+}
 
 // Render ra các item chính
 function RenderItem(arr) {
     var row = document.querySelector(".grid_row.main_row_category");
+    console.log(arr);
     html = "";
     arr.forEach(function (item) {
         html += `
@@ -113,7 +146,7 @@ function RenderItem(arr) {
                                                 </div>
                                                 <div class="container-btn-click">
 
-                                                    <button class="add-my-wrap" onclick="CreaterCategory(1)">Thêm vào giỏ hàng</button>
+                                                    <button class="add-my-wrap" onclick="addToMyWrap(${item.id_phu},1)" onclick="CreaterCategory(1)">Thêm vào giỏ hàng</button>
                                                 </div>
                                         </div>
                                     </div>
@@ -265,10 +298,11 @@ setTimeout(
     function () {
         loadPage();
         showCurrentPage();
+        showItemSmallCart();
     }
-    ,100)
-showCurrentPage();
+    ,10)
+// showCurrentPage();
 getTotalItem();
-
+// showItemSmallCart();
 
 // Gọi hàm để lấy dữ liệu từ URL khi cần

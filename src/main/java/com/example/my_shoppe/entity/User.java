@@ -3,6 +3,7 @@ package com.example.my_shoppe.entity;
 import jakarta.persistence.*;
 
 import java.util.Collection;
+import java.util.Map;
 
 @Entity
 @Table(name = "accounts")
@@ -26,6 +27,9 @@ public class User {
         private String lastName;
     @Column(name="email")
     private String email;
+
+    @Column(name = "itemcart")
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name="users_roles",
