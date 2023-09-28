@@ -225,7 +225,9 @@
                                     
 
                                 </ul>
-                                <button class="header__cart-see-mycart">Xem Giỏ Hàng </button>
+                                <form th:action="@{/cart/detail}" method="get">
+                                <button type="submit" class="header__cart-see-mycart" >Xem Giỏ Hàng </button>
+                                </form>
 
                             </div>
 

@@ -8,17 +8,17 @@ import com.example.my_shoppe.entity.Category;
 import com.example.my_shoppe.entity.Oder;
 import com.example.my_shoppe.entity.OderItem;
 import com.example.my_shoppe.entity.User;
+import com.example.my_shoppe.web.CartItemRender;
+import com.example.my_shoppe.web.CategoryDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -97,6 +97,32 @@ public class CartItemController {
             System.out.println(oderItem.toString());
             oderItemRepository.deleteById(oderItem.getId());
 //            oderItemRepository.deleteById(Long.valueOf(10));
+    }
+    @GetMapping("/detail")
+    public String toDetailCart(Model model) {
+        System.out.println("Có tới hay khong ?");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+        User user = userRepository.findByUsername(username);
+        Oder oder = oderRepository.findByIdKhachHang(user.getId());
+        List<OderItem> list = oderItemRepository.findAllByOderid(oder.getId());
+        List<CategoryDetail> listReturn = new ArrayList<>();
+        for(OderItem item : list) {
+            Optional<Category> categoryOptional = categoryRepository.findById(item.getCategoryid());
+            Category category = null;
+            if(categoryOptional.isPresent()) {
+                category = categoryOptional.get();
+            }
+            CategoryDetail cartItemRender = new CategoryDetail(category,item);
+            listReturn.add(cartItemRender);
+//            System.out.println(cartItemRender.toString());
+        }
+        for(CategoryDetail item : listReturn) {
+            System.out.println(item);
+        }
+       model.addAttribute("list",listReturn);
+        return "cart/list";
     }
 
 

@@ -68,7 +68,7 @@ function sortPrice(query) {
         });
 }
 // Lấy item từ oder của người dùng để Render ra thanh thông báo nhỏ
-function showItemSmallCart() {
+function showItemSmallCart(id) {
     var url = currentURL + "/api/itemcart";
     fetch(url)
         .then(response => {
@@ -79,6 +79,19 @@ function showItemSmallCart() {
         })
         .then(data => {
             var html = "";
+            var quantityCurrent = null;
+            var totalCurrent  = null;
+            if(id >= 1) {
+                var query1= ".my-quantity-" + id;
+                var query2 = ".my-total-price-" + id;
+                // console.log(id);
+                // console.log(tẽ)
+                // console.log(quantityCurrent);
+                // console.log(totalCurrent);
+                quantityCurrent = document.querySelector(query1);
+                totalCurrent = document.querySelector(query2);
+            }
+
             html+= "<div class=\"header__cart-list-bridge\"></div>" +
                 "<div th:if=\"${#authorization.expression('isAuthenticated()')}\" class=\"header__cart-list-have-item\">\n" +
                 "                                <div class=\"header__cart-list-announce\">\n" +
@@ -100,14 +113,18 @@ function showItemSmallCart() {
                                             <button class="header__cart-list-btn-delete" onclick="deleteById(${item.category.id})">Xóa</button>
                                         </div>
                                     </li>`;
+                if(id === item.category.id && quantityCurrent !== null) {
+                    var tex1 = item.oderItem.quantity *1;
+                    var tex2 = item.oderItem.quantity*item.oderItem.price + ".000đ";
+                    quantityCurrent.innerText = tex1;
+                    totalCurrent.innerText = tex2;
+                }
             })
             if(data.length > 0) {
-                html += " </ul>\n" +
-                    " <button class=\"header__cart-see-mycart\">Xem Giỏ Hàng </button" +
-                    "</div>\n" +
-                    "\n" +
-                    "                            </div>"
-                console.log(html);
+                html += "</ul>\n" +
+                    "                                <form action=\"/cart/detail\" method=\"get\">\n" +
+                    "                                <button type=\"submit\" class=\"header__cart-see-mycart\" >Xem Giỏ Hàng </button>\n" +
+                    "                                </form>";
             }
             else {
                 html = "<div class=\"header__cart-list-bridge\"></div>\n" +
@@ -238,6 +255,9 @@ function loadDetailPage(html,i) {
 
     return html;
 }
+function RenderInCartItem() {
+
+}
 
 // Hàm hiện ra trang hiện tại khi user chuyển page
 function showCurrentPage() {
@@ -319,7 +339,7 @@ setTimeout(
     function () {
         loadPage();
         showCurrentPage();
-        showItemSmallCart();
+        showItemSmallCart(0);
     }
     ,10)
 // showCurrentPage();

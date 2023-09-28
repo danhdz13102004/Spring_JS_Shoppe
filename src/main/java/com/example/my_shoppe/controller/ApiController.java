@@ -9,6 +9,7 @@ import com.example.my_shoppe.entity.Oder;
 import com.example.my_shoppe.entity.OderItem;
 import com.example.my_shoppe.entity.User;
 import com.example.my_shoppe.web.CartItemRender;
+import com.example.my_shoppe.web.CategoryDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -66,5 +67,30 @@ public class ApiController {
             }
         }
         return null;
+    }
+    @GetMapping("/detail")
+    public List<CategoryDetail> toDetailCart() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        String username = userDetails.getUsername();
+        User user = userRepository.findByUsername(username);
+        Oder oder = oderRepository.findByIdKhachHang(user.getId());
+        List<OderItem> list = oderItemRepository.findAllByOderid(oder.getId());
+        List<CategoryDetail> listReturn = new ArrayList<>();
+        for(OderItem item : list) {
+            Optional<Category> categoryOptional = categoryRepository.findById(item.getCategoryid());
+            Category category = null;
+            if(categoryOptional.isPresent()) {
+                category = categoryOptional.get();
+            }
+            CategoryDetail cartItemRender = new CategoryDetail(category,item);
+            listReturn.add(cartItemRender);
+//            System.out.println(cartItemRender.toString());
+        }
+        for(CategoryDetail item : listReturn) {
+            System.out.println(item);
+        }
+        for(CategoryDetail item : listReturn) System.out.println(item);
+        return listReturn;
     }
 }
