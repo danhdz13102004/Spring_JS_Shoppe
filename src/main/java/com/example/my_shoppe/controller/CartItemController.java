@@ -17,6 +17,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponents;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,12 +76,13 @@ public class CartItemController {
             else {
                 System.out.println("Co roi");
                 int newsl = quantity + oderItem.getQuantity();
-                if(newsl <= 0 ) {
-                    oderItemRepository.deleteById(oderItem.getId());
-                }
-                else {
-                    oderItem.setQuantity(newsl);
-                    oderItemRepository.saveAndFlush(oderItem);
+                if(!(quantity == -1 && oderItem.getQuantity() ==1)) {
+                    if (newsl <= 0) {
+                        oderItemRepository.deleteById(oderItem.getId());
+                    } else {
+                        oderItem.setQuantity(newsl);
+                        oderItemRepository.saveAndFlush(oderItem);
+                    }
                 }
             }
         oderRepository.saveAndFlush(oder);
@@ -118,10 +122,16 @@ public class CartItemController {
             listReturn.add(cartItemRender);
 //            System.out.println(cartItemRender.toString());
         }
+        long totalReturn = 0;
         for(CategoryDetail item : listReturn) {
-            System.out.println(item);
+            totalReturn += item.getTotal();
         }
+        model.addAttribute("total",listReturn.size());
        model.addAttribute("list",listReturn);
+        UriComponents uriComponents = ServletUriComponentsBuilder.fromCurrentContextPath().build();
+        String baseUrl = uriComponents.toUriString();
+        model.addAttribute("url",baseUrl);
+        model.addAttribute("mytotal",totalReturn);
         return "cart/list";
     }
 

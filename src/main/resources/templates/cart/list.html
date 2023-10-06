@@ -32,11 +32,14 @@
             <div class="title">
                 <div class="row">
                     <div class="col"><h4><b>Shopping Cart</b></h4></div>
-                    <div class="col align-self-center text-right text-muted">3 items</div>
+                    <div class="col align-self-center text-right text-muted">
+                        <span class="title-total-item" th:text="${total}"></span>
+                        items
+                    </div>
                 </div>
             </div>
-            <div th:each="item : ${list}"  class="my-list">
-                <div class="row border-top border-bottom">
+            <div  class="my-list">
+                <div th:each="item : ${list}"  class="row border-top border-bottom">
                     <div class="row main align-items-center">
                         <div class="col-2"><img class="img-fluid" th:src="'../../static/access/img/' + ${item.img} + '.jpg'"></div>
                         <div class="col">
@@ -50,33 +53,31 @@
                         </div>
                         <div th:class="'col my-total-price-' + ${item.idsp}"  th:text="${item.total + '.000đ'}" ></div>
                         <div class="col">
-                            <a style="color: red;" class="btn-detele-category">X</a>
+                            <a th:onclick="'deleteById(' + ${item.idsp} + ',1)'" style="color: red;" class="btn-detele-category">X</a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="back-to-shop"><a href="#">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
+
         </div>
-<!--        <div class="col-md-4 summary">-->
-<!--            <div><h5><b>Summary</b></h5></div>-->
-<!--            <hr>-->
-<!--            <div class="row">-->
-<!--                <div class="col" style="padding-left:0;">ITEMS 3</div>-->
-<!--                <div class="col text-right">&euro; 132.00</div>-->
-<!--            </div>-->
-<!--            <form>-->
-<!--                <p>SHIPPING</p>-->
-<!--                <select><option class="text-muted">Standard-Delivery- &euro;5.00</option></select>-->
-<!--                <p>GIVE CODE</p>-->
-<!--                <input id="code" placeholder="Enter your code">-->
-<!--            </form>-->
-<!--            <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">-->
-<!--                <div class="col">TOTAL PRICE</div>-->
-<!--                <div class="col text-right">&euro; 137.00</div>-->
-<!--            </div>-->
-<!--            <button class="btn">CHECKOUT</button>-->
-<!--        </div>-->
     </div>
+    <div class="row main align-items-center" >
+            <span class="total-price-title col-6">Total:</span>
+            <span th:text="${mytotal} + '.000đ'" class="total-price-number col-2">100.000đ</span>
+    </div>
+    <div class="row main align-items-center">
+        <div class="contain-return-or-next">
+            <div class="back-to-shop">
+                <a th:href="${url}">&leftarrow;
+                    <span class="text-muted">Back to shop</span>
+                </a>
+            </div>
+            <form class="form-checkin">
+                <button class="btn-primary my-btn-submit" type="submit" >Check In</button>
+            </form>
+        </div>
+    </div>
+
 
 </div>

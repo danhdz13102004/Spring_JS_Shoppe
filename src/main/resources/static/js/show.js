@@ -42,7 +42,8 @@ function sortPrice(query) {
         document.querySelector(".priceHigher .my-check-icon").classList.add("show");
         document.querySelector(".priceLower .my-check-icon").classList.remove("show");
     }
-    // loadItemChangePage(1);
+    currentPage = 1;
+    loadItemChangePage(1);
     focusBtnCurrent(1);
     console.log(currentURL);
     const url = currentURL + "/categories?sort=newprice" + query + "&page" + parseInt(currentPage-1) + "&size=" + limitItem;
@@ -81,16 +82,18 @@ function showItemSmallCart(id) {
             var html = "";
             var quantityCurrent = null;
             var totalCurrent  = null;
+            var totalPriceAll = 0;
             if(id >= 1) {
                 var query1= ".my-quantity-" + id;
                 var query2 = ".my-total-price-" + id;
-                // console.log(id);
-                // console.log(tẽ)
-                // console.log(quantityCurrent);
-                // console.log(totalCurrent);
                 quantityCurrent = document.querySelector(query1);
                 totalCurrent = document.querySelector(query2);
             }
+            else {
+                console.log("id sai");
+            }
+            console.log("tới đây rùi",id);
+            console.log(quantityCurrent,totalCurrent);
 
             html+= "<div class=\"header__cart-list-bridge\"></div>" +
                 "<div th:if=\"${#authorization.expression('isAuthenticated()')}\" class=\"header__cart-list-have-item\">\n" +
@@ -99,6 +102,7 @@ function showItemSmallCart(id) {
                 "                                </div>\n" +
                 "                                <ul class=\"header__cart-list-set\"> ";
             data.forEach(item => {
+                totalPriceAll += item.oderItem.quantity*item.oderItem.price;
                 html += `<li class="header__cart-list-item">
                                         <img class="header__cart-list-item-img" src="../static/access/img/${item.category.image}.jpg" alt="">
                                         <div class="header__cart-list-detail">
@@ -114,8 +118,9 @@ function showItemSmallCart(id) {
                                         </div>
                                     </li>`;
                 if(id === item.category.id && quantityCurrent !== null) {
+                    console.log(tex1,tex2);
                     var tex1 = item.oderItem.quantity *1;
-                    var tex2 = item.oderItem.quantity*item.oderItem.price + ".000đ";
+                    var tex2 = toPriceString(item.oderItem.quantity*item.oderItem.price ) +".000đ";
                     quantityCurrent.innerText = tex1;
                     totalCurrent.innerText = tex2;
                 }
@@ -133,8 +138,14 @@ function showItemSmallCart(id) {
                     "                                    <h3 th:unless=\"${#authorization.expression('isAuthenticated()')}\" class=\"header__cart-list-msg\">Chưa có sản phẩm </h3>\n" +
                     "                                </div>"
             }
-            document.querySelector(".header__cart-list.header__cart-list--no_cart").innerHTML = html;
-            document.querySelector(".header_cart-badge").innerText = data.length;
+            var o1 = document.querySelector(".header__cart-list.header__cart-list--no_cart");
+            if(o1 !== null) o1.innerHTML = html;
+            var o2 = document.querySelector(".header_cart-badge");
+            if(o2 !== null) o2.innerText = data.length;
+            var o3 = document.querySelector(".total-price-number")
+            if(o3 !== null) {
+                o3.innerText = toPriceString(totalPriceAll) + '.000đ';
+            }
         })
 }
 
@@ -333,7 +344,7 @@ function loadPage() {
         "                            </li>";
 
    var a =  document.querySelector(".my-list-contain-page");
-   a.innerHTML = html;
+   if(a !== null) a.innerHTML = html;
 }
 setTimeout(
     function () {

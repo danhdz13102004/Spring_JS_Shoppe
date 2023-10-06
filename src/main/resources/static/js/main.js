@@ -15,6 +15,9 @@ function focusBtnCurrent(index) {
     }
 }
 function addToMyWrap(id,quantity) {
+    if(quantity === -1) {
+
+    }
     console.log("hehe");
     var url = currentURL + "/cart/add?id=" + id + "&quantity=" + quantity;
     console.log(url);
@@ -25,7 +28,7 @@ function addToMyWrap(id,quantity) {
         }
     })
         .then(function(response) {
-            console.log("mới tới");
+            // console.log("mới tới");
             if (!response.ok) {
                 showItemSmallCart(id);
                 throw new Error("Network response was not ok");
@@ -41,7 +44,7 @@ function addToMyWrap(id,quantity) {
             // Xử lý lỗi nếu có
         });
 }
-function deleteById(id) {
+function deleteById(id,status) {
     var url = currentURL + "/cart/deleteitem?id=" + id;
     console.log(url);
     fetch(url, {
@@ -54,6 +57,10 @@ function deleteById(id) {
             console.log("mới tới");
             if (!response.ok) {
                 showItemSmallCart();
+                console.log(status);
+                if(status === 1) {
+                    loadItemToCartList();
+                }
                 throw new Error("Network response was not ok");
             }
             return response.json();
@@ -74,6 +81,7 @@ function loadItemToCartList() {
     fetch(url)
         .then(response => {
             if (!response.ok) {
+                console.log("Lỗi rồi ae ơi");
                 throw new Error("Lỗi khi lấy dữ liệu từ URL");
             }
             return response.json();
@@ -81,39 +89,49 @@ function loadItemToCartList() {
         .then(data => {
             var html = "";
             data.forEach(item => {
+                console.log(item);
+                var price = toPriceString(item.oderItem.price) + '.000đ';
+                var myTotal = toPriceString(item.oderItem.price*item.oderItem.quantity ) + '.000đ';
+                console.log((price,myTotal));
                 html += `<div class="row border-top border-bottom">
                     <div class="row main align-items-center">
-                        <div class="col-2"><img class="img-fluid" th:src="'../../static/access/img/' + ${item.img} + '.jpg'"></div>
+                        <div class="col-2"><img class="img-fluid" src="../../static/access/img/${item.category.image}.jpg"></div>
                         <div class="col">
-                            <div th:text="${item.price} + '.000đ' " class="row text-muted"></div>
-                            <div th:text="${item.name}" class="row my-col-text"></div>
+                            <div class="row text-muted">${price}</div>
+                            <div  class="row my-col-text">${item.category.name}</div>
                         </div>
                         <div class="col">
-                            <span class="my-icon-change-quantity"  th:onclick="'addToMyWrap(' + ${item.id} + ', -1)'" > - </span>
-                            <span  class="border " th:text="${item.getQuantity()}"></span>
-                            <span class="my-icon-change-quantity"  th:onclick="'addToMyWrap(' + ${item.id} + ', 1)'" >+</span>
+                            <span class="my-icon-change-quantity"  onclick="addToMyWrap(${item.category.id}, -1)" > - </span>
+                            <span  class="border my-quantity-${item.category.id}">${item.oderItem.quantity}</span>
+                            <span class="my-icon-change-quantity"  onclick="addToMyWrap(${item.category.id}, 1)" >+</span>
                         </div>
-                        <div  th:text="${item.total + '.000đ'}" class="col "></div>
+                        <div   class="col my-total-price-${item.category.id}">${myTotal}</div>
                         <div class="col">
-                            <a style="color: red;" class="btn-detele-category">X</a>
+                            <a onclick="deleteById(${item.category.id},1)"  style="color: red;" class="btn-detele-category">X</a>
                         </div>
                     </div>
                 </div>`;
             })
             var a = document.querySelector(".my-list");
+            var b = document.querySelector(".title-total-item");
+            console.log(html);
             if(a !== null) {
                 a.innerHTML = html;
             }
+            if(b !== null) {
+                b.innerText = data.length;
+            }
         })
 }
-function changeQuantity() {
-
+function toPriceString(price) {
+    price += "";
+    var tmp = "";
+    var t = 0;
+    for(var i = price.length - 1; i >= 0; i--) {
+        t++;
+        tmp = price[i] + tmp;
+        if(t % 3 === 0 && i !== 0) tmp = "." + tmp;
+    }
+    return tmp;
 }
-// if(1) {
-//     var aUrl = currentURL + "/cart/detail";
-//     var bUrl = currentURL + "/cart/detail?";
-//     if(myUrl === aUrl || myUrl === bUrl) {
-//         loadItemToCartList();
-//     }
-// }
-// loadItemToCartList();
+
